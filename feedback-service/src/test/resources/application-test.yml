@@ -1,0 +1,57 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/vk-spring24v1
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/vk-spring24v1
+            user-name-attribute: preferred_username
+        registration:
+          metrics:
+            provider: keycloak
+            client-id: feedback-service-metrics-client
+            client-secret: lYZwR3r6luoBOIOORh4L25PUWdKJ2wOb
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_server
+  datasource:
+    url: jdbc:h2:mem:vk_spring24v1_publication_db
+  cloud:
+    loadbalancer:
+      enabled: false
+  boot:
+    admin:
+      client:
+        enabled: false
+  application:
+    name: feedback-service
+vk:
+  services:
+    publication:
+      url: http://localhost:54321
+      registrationId: keycloak
+eureka:
+  client:
+    enabled: false
+server:
+  port: 8083
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: feedback-service-swagger-ui
+      use-pkce-with-authorization-code-grant: true
+keycloak:
+  uri: http://localhost:8082
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true

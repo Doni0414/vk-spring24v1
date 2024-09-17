@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:vk_spring24v1_publication_db
+  boot:
+    admin:
+      client:
+        enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/vk-spring24v1
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/vk-spring24v1
+        registration:
+          keycloak:
+            client-id: publication-service-metrics-client
+            client-secret: f6u36pXYjs5gcTl8hEurjqWxZKy3uxbd
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_server
+  application:
+    name: publication-service
+server:
+  port: 8081
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: publication-service-swagger-ui
+      use-pkce-with-authorization-code-grant: true
+keycloak:
+  uri: http://localhost:8082
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+eureka:
+  client:
+    enabled: false

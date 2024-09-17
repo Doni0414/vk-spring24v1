@@ -1,0 +1,58 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          metrics:
+            provider: keycloak
+            client-id: message-service-metrics-client
+            client-secret: xkInP7x0PcOarPqtn2e8B0ytWnlPdN33
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_server
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/vk-spring24v1
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/vk-spring24v1
+  jpa:
+    show-sql: true
+  application:
+    name: message-service
+  datasource:
+    url: jdbc:h2:mem:vk_spring24v1_message_db
+  cloud:
+    loadbalancer:
+      enabled: false
+  boot:
+    admin:
+      client:
+        enabled: false
+eureka:
+  client:
+    enabled: false
+vk:
+  services:
+    messenger:
+      url: http://localhost:54321
+
+server:
+  port: 8085
+springdoc:
+  swagger-ui:
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      client-id: message-service-swagger-ui
+keycloak:
+  uri: http://localhost:8082
+management:
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'

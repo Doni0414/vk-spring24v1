@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: message-service
+  config:
+    import: 'optional:configserver:'
+  cloud:
+    config:
+      uri: http://localhost:8888
+      username: config
+      password: config-password
+server:
+  port: 8085
+  forward-headers-strategy: framework
