@@ -1,0 +1,86 @@
+name: vk-spring
+services:
+  # Infrastructure
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.7
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - './config/keycloak/import:/opt/keycloak/data/import'
+    ports:
+      - '8082:8080'
+    command: start-dev --import-realm
+  # Services
+  config-server:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: config-server/target/config-server-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: git
+    ports:
+      - '8888:8888'
+  eureka-server:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: eureka-server/target/eureka-server-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: cloudconfig
+    ports:
+      - '8761:8761'
+  admin-server:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: admin-server/target/admin-server-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: cloudconfig
+    ports:
+      - '8090:8090'
+  publication-service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: publication-service/target/publication-service-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: cloudconfig, gateway
+  messenger-service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: messenger-service/target/messenger-service-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: cloudconfig, gateway
+  feedback-service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: feedback-service/target/feedback-service-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: cloudconfig, gateway
+  message-service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: message-service/target/message-service-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: cloudconfig, gateway
+  api-gateway:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: api-gateway/target/api-gateway-24.1.0-SNAPSHOT-exec.jar
+    environment:
+      SPRING_PROFILES_ACTIVE: cloudconfig
+    ports:
+      - '8086:8086'

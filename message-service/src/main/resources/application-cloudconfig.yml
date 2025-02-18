@@ -5,7 +5,7 @@ spring:
     import: 'optional:configserver:'
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: http://172.28.160.1:8888
       username: config
       password: config-password
 server:

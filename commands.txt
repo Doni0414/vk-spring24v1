@@ -1,0 +1,5 @@
+docker run --name selmag-keycloak -p 8082:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -v C:\Users\сулпак\IdeaProjects\sc24/config/keycloak/import:/opt/keycloak/data/import quay.io/keycloak/keycloak:23.0.7 start-dev --import-realm
+
+docker build --build-arg JAR_FILE=admin-server/target/admin-server-24.1.1-SNAPSHOT-exec.jar -t selmag/admin-server:24.1.1 .
+
+docker run -p 8085:8085 -e SPRING_PROFILES_ACTIVE=cloudconfig --name selmag-admin-server selmag/admin-server:24.1.1
